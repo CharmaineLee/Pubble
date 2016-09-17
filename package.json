@@ -4,6 +4,9 @@
     "keywords": [],
     "name": "pubble-1",
     "pebble": {
+        "capabilities": [
+            "location"
+        ],
         "displayName": "Pubble 1 ",
         "enableMultiJS": true,
         "messageKeys": [],
@@ -12,6 +15,10 @@
             "media": []
         },
         "sdkVersion": "3",
+        "targetPlatforms": [
+            "basalt",
+            "chalk"
+        ],
         "uuid": "66c1083b-d157-4e0b-8bd0-e8c1879e849c",
         "watchapp": {
             "watchface": false

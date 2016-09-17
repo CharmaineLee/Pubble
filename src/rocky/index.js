@@ -1,42 +1,47 @@
-// PebbleKit JS (pkjs)
+var rocky = require('rocky');
 
-var myAPIKey = '1234567890';
+var location;
 
-Pebble.on('message', function(event) {
-  // Get the message that was passed
+rocky.on('minutechange', function(event) {
+  // Send a message to fetch location information (on startup and every minute)
+  rocky.postMessage({'fetch': true});
+  
+  // Tick every minute
+  rocky.requestDraw();
+});
+
+rocky.on('message', function(event) {
+  // Receive a message from the mobile device (pkjs)
   var message = event.data;
 
-  if (message.fetch) {
-    navigator.geolocation.getCurrentPosition(function(pos) {
-      var url = 'http://api.openweathermap.org/data/2.5/weather' +
-              '?lat=' + pos.coords.latitude +
-              '&lon=' + pos.coords.longitude +
-              '&appid=' + myAPIKey;
+  if (message.location) {
+    // Save the location data
+    location = message.location;
 
-      request(url, 'GET', function(respText) {
-        var weatherData = JSON.parse(respText);
-
-        Pebble.postMessage({
-          'weather': {
-            // Convert from Kelvin
-            'celcius': Math.round(weatherData.main.temp - 273.15),
-            'fahrenheit': Math.round((weatherData.main.temp - 273.15) * 9 / 5 + 32),
-            'desc': weatherData.weather[0].main
-          }
-        });
-      });
-    }, function(err) {
-      console.error('Error getting location');
-    },
-    { timeout: 15000, maximumAge: 60000 });
+    // Request a redraw so we see the information
+    rocky.requestDraw();
   }
 });
 
-function request(url, type, callback) {
-  var xhr = new XMLHttpRequest();
-  xhr.onload = function () {
-    callback(this.responseText);
-  };
-  xhr.open(type, url);
-  xhr.send();
+rocky.on('draw', function(event) {
+  var ctx = event.context;
+
+  // Clear the screen
+  ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
+
+  // Draw the location text
+  drawLocation(ctx, location);
+});  
+
+function drawLocation(ctx, location) {
+  var latitudeString = location.coords.latitude
+  var longitudeString = location.coords.longitude;
+  
+  // Draw the text, top center
+  ctx.fillStyle = 'white';
+  ctx.textAlign = 'center';
+  ctx.font = '14px Gothic';
+  ctx.fillText(latitudeString, ctx.canvas.unobstructedWidth / 2, 2);
+  ctx.fillText(longitudeString, ctx.canvas.unobstructedWidth / 2, 12);
 }
+
