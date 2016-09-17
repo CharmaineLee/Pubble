@@ -1,3 +1,5 @@
+// Rocky JS (rocky.js)
+
 var rocky = require('rocky');
 
 var location;
