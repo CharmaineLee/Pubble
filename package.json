@@ -1,0 +1,21 @@
+{
+    "author": "charmainekmlee@yahoo.ca",
+    "dependencies": {},
+    "keywords": [],
+    "name": "pubble-1",
+    "pebble": {
+        "displayName": "Pubble 1 ",
+        "enableMultiJS": true,
+        "messageKeys": [],
+        "projectType": "rocky",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "uuid": "66c1083b-d157-4e0b-8bd0-e8c1879e849c",
+        "watchapp": {
+            "watchface": false
+        }
+    },
+    "version": "1.0.0"
+}
